@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../l10n/app_localizations.dart';
+import 'buildFilter.dart';
 
 class BuildSearchCategoriesTaps extends StatelessWidget {
   const BuildSearchCategoriesTaps({super.key});
@@ -9,6 +10,7 @@ class BuildSearchCategoriesTaps extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController searchController = TextEditingController();
+
     return Row(
       children: [
         SizedBox(width: 17.w),
@@ -34,22 +36,12 @@ class BuildSearchCategoriesTaps extends StatelessWidget {
                 ),
               ),
             ),
-
           ),
         ),
         SizedBox(width: 16.w),
-        Container(
-          width: 40.w,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.black54)
-
-          ),
-          child: Icon(Icons.list,size: 40,),
-        ),
+        BuildFilter(),
         SizedBox(width: 16.w),
       ],
     );
-
   }
 }
