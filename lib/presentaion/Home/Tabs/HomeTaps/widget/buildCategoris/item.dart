@@ -1,50 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../../core/ColorsManger/ColorsManger.dart';
-import '../../../../../../core/TextStyel/TextStayel.dart';
+import '../../../../../../data/api/model/categories_Response/Categories.dart';
+import '../../../../../../data_static/provider/providerGlopal.dart';
+import '../../../../home.dart';
 
+class itemCategories extends StatelessWidget {
+  CategoriesApi categoriesApi;
+  int index;
 
-class itemCategoris extends StatelessWidget {
-  String image;
-  String text;
-  VoidCallback function;
-
-   itemCategoris({super.key,required this.function,required this.image,required this.text, });
+  itemCategories({super.key, required this.categoriesApi, required this.index});
 
   @override
   Widget build(BuildContext context) {
-
-    return  Padding(
-      padding:  REdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: 8
-
-      ),
+    var providerGlobal = Provider.of<ProviderGlobal>(context);
+    return Padding(
+      padding: REdgeInsets.symmetric(horizontal: 6),
       child: InkWell(
-        onTap: function,
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: ColorsManger.ofWhite,
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              width: 68.w,
-              height: 70.h,
-              alignment: Alignment.center, // يضمن إن الصورة تكون في النص
-              child: SizedBox(
-                width: 30.w, // حجم أصغر للصورة
-                height: 30.h,
-                child: SvgPicture.asset(image),
-              ),
+        onTap: () {
+          providerGlobal.changeIndexTabBarCategories(index + 1);
+          providerGlobal.changIdCategories(categoriesApi.id);
+          final homeState = context.findAncestorStateOfType<HomeState>();
+          if (homeState != null) {
+            homeState.changeTab(1);
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(color: Colors.grey.shade400),
+          ),
+          child: Text(
+            textAlign: TextAlign.center,
+            categoriesApi.name ?? "",
+            style: GoogleFonts.cairo(
+              fontSize: 11.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
-            Text(text,style: TextStyleLight.textItemCategories,)
-
-          ],
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );

@@ -1,93 +1,83 @@
-import 'package:flower/core/ColorsManger/ColorsManger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widget/buildOcccasionItem.dart';
+import 'package:provider/provider.dart';
 
-class OccasionScreen extends StatelessWidget {
+import '../viewModel/occasion_viewModel.dart';
+import '../viewModel/productsViewModelByOccasion.dart';
+import '../widget/buildOcccasionItem.dart';
+import '../widget/buildTabBarOccasion.dart';
+
+class OccasionScreen extends StatefulWidget {
   const OccasionScreen({super.key});
 
   @override
+  State<OccasionScreen> createState() => _OccasionScreenState();
+}
+
+class _OccasionScreenState extends State<OccasionScreen> {
+  OccasionViewModel occasionViewModel = OccasionViewModel();
+  ProductsViewModelByOccasion productsViewModelByOccasion = ProductsViewModelByOccasion();
+  int? index;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String?, dynamic>?;
+    index = arguments?['index'];
+    String? occasionId = arguments?['occasionId'];
+      loadDataFromSpecificOccasion(occasionId??"");
+  }
+  Future<void> loadDataFromSpecificOccasion(String occasionId) async {
+    occasionViewModel.getOccasion();
+    productsViewModelByOccasion.getProducts(id: occasionId);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    int crossAxisCount = 2;
-    if (screenWidth > 500) {
-      crossAxisCount = 3;
-    }
-
-    List<String> tittle = ["Wedding", "Graduation", "Birthday", "Katb Ketab","Graduation","Graduation","Graduation","Graduation","Graduation","Graduation","Graduation","Graduation",];
+    final GlobalKey<BuildOcccasionItemState> productsKey = GlobalKey<BuildOcccasionItemState>();
 
     return SafeArea(
-      child: DefaultTabController(
-        length: tittle.length,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(90.h),
-            child: AppBar(
-              leadingWidth: 25,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Occasion",
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text(
-                    "Bloom with our exquisite best sellers",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ],
-              ),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(50.h),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: TabBar(
-                    onTap: (index) {
-                      print(index);
-                    },
-                    unselectedLabelStyle: TextStyle(color: Colors.black38),
-                    labelStyle: TextStyle(color: ColorsManger.bink),
-                    tabAlignment: TabAlignment.start,
-                    labelPadding: REdgeInsets.all(8),
-                    dividerColor: Colors.transparent,
-                    indicatorColor: ColorsManger.bink,
-                    isScrollable: true,
-                    tabs: tittle.map((tittle) {
-                      return Text(tittle,);
-                    }).toList(),
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.h),
+          child: AppBar(
+            leadingWidth: 25,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Occasion",
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
+                Text(
+                  "Bloom with our exquisite best sellers",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
             ),
           ),
-          body: SingleChildScrollView(
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount, // عدد الأعمدة
-                crossAxisSpacing: 10, // المسافة بين الأعمدة
-                mainAxisSpacing: 16, // المسافة بين الصفوف
-                childAspectRatio:
-                0.6, // النسبة بين العرض والارتفاع (أقل من 1 يعني العناصر هتكون أطول)
-              ),
-              itemBuilder:
-                  (context, index) => BuildOcccasionItem(
-                price: "600",
-                discountRate: "20",
-                nameProduct: "Red roses",
-                priceBeforeDiscount: "900",
-              ),
-              itemCount: 10,
-            ),
-          ), // خليت البودي فاضي عشان الكود يشتغل من غير تعديل
+        ),
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: occasionViewModel),
+            ChangeNotifierProvider.value(value: productsViewModelByOccasion),
+          ],
+          child: Column(
+            children: [
+              SizedBox(height: 10.h),
+              BuildTabBarOccasion(index: index, productsKey: productsKey),
+              SizedBox(height: 8.h),
+              Expanded(child: BuildOcccasionItem(productsViewModelByOccasion: productsViewModelByOccasion, key: productsKey)),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/TextStyel/TextStayel.dart';
+import '../../../data/api/model/best_seller_Response/BestSeller.dart';
 import '../widget/bestSellerItem.dart';
 
 class BestSellerScreen extends StatelessWidget {
@@ -7,8 +8,8 @@ class BestSellerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<BestSellerApi>? bestSeller= ModalRoute.of(context)?.settings.arguments as List<BestSellerApi>?;
     double screenWidth = MediaQuery.of(context).size.width;
-
     int crossAxisCount = 2;
     if (screenWidth > 500) {
       crossAxisCount = 3;
@@ -42,12 +43,14 @@ class BestSellerScreen extends StatelessWidget {
             ),
             itemBuilder:
                 (context, index) => BestSellerItem(
-                  price: "600",
-                  discountRate: "20",
-                  nameProduct: "Red roses",
-                  priceBeforeDiscount: "900",
+                  id: bestSeller[index].id,
+                  image:bestSeller[index].images!.first,
+                  price:bestSeller[index].price.toString(),
+                  discountRate: bestSeller[index].discount.toString(),
+                  nameProduct: bestSeller[index].title,
+                  priceBeforeDiscount: bestSeller[index].priceAfterDiscount.toString(),
                 ),
-            itemCount: 10,
+            itemCount: bestSeller!.length,
           ),
         ),
       ),

@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../config/theme/my_theme.dart';
 import '../core/routsManger/routs_manger.dart';
 import '../l10n/app_localizations.dart';
-import '../presentaion/Home/home.dart';
 
 
 class Myapp extends StatelessWidget {

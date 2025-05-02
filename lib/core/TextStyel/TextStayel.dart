@@ -47,10 +47,10 @@ class TextStyleLight {
       fontWeight: FontWeight.w500
 
   );
-  static TextStyle textItemCategories = GoogleFonts.inter( // هنا استخدمنا خط Lobster
+  static TextStyle textItemCategories = GoogleFonts.alatsi( // هنا استخدمنا خط Lobster
       fontSize: 14,
       color: ColorsManger.black,
-      fontWeight: FontWeight.w400
+      fontWeight: FontWeight.w500
 
   );
   static TextStyle bestDSeller = GoogleFonts.inter( // هنا استخدمنا خط Lobster

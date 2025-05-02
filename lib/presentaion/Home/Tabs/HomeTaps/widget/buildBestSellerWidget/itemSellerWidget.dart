@@ -5,35 +5,25 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../core/routsManger/routs_manger.dart';
 
-class ItemOcasion extends StatelessWidget {
+class ItemSellerWidget extends StatelessWidget {
   final String image;
   final String text;
+  final num price;
   String? id;
-  int index;
 
-  ItemOcasion({
+  ItemSellerWidget({
     super.key,
-    required this.image,
     required this.id,
+    required this.image,
     required this.text,
-    required this.index,
+    required this.price,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String baseUrl = "https://flower.elevateegy.com/uploads/";
-    String fullImageUrl = "$baseUrl$image";
-
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          RoutesManger.occasionScreen,
-          arguments: {
-            'index': index,
-            'occasionId': id,
-          },
-        );
+        Navigator.pushNamed(context, RoutesManger.productDetails, arguments: id);
       },
       child: Padding(
         padding: EdgeInsets.all(8.0.w),
@@ -60,8 +50,8 @@ class ItemOcasion extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.r),
                   child: CachedNetworkImage(
+                    imageUrl: image,
                     fit: BoxFit.cover,
-                    imageUrl: fullImageUrl,
                     placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
@@ -74,19 +64,25 @@ class ItemOcasion extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.h),
-              SizedBox(
-                width: 130.w,
-                child: Text(
-                  text,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
+              Text(
+                text,
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
+              SizedBox(height: 4.h),
+              Text(
+                "$price EGP",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
+                ),
+              )
             ],
           ),
         ),

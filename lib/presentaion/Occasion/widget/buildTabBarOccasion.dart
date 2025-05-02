@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:shimmer/shimmer.dart'; // أضف السطر ده
+import '../viewModel/occasion_viewModel.dart';
+import 'buildOcccasionItem.dart';
 
-import '../../../../../data/api/model/categories_Response/Categories.dart';
-import '../../../../../data_static/provider/providerGlopal.dart';
-import '../view_model/categoryViewModel.dart';
-import '../view_model/productsViewModelByCategories.dart';
+class BuildTabBarOccasion extends StatelessWidget {
+  final int? index;
+  final GlobalKey<BuildOcccasionItemState> productsKey;
+  const BuildTabBarOccasion({super.key, this.index, required this.productsKey});
 
-class BuildTapBarCategoriesTaps extends StatefulWidget {
-  const BuildTapBarCategoriesTaps({super.key});
-
-  @override
-  State<BuildTapBarCategoriesTaps> createState() =>
-      BuildTapBarCategoriesTapsState();
-}
-
-class BuildTapBarCategoriesTapsState extends State<BuildTapBarCategoriesTaps> {
-  bool isAllAdded = false;
   @override
   Widget build(BuildContext context) {
-    var providerGlobal = Provider.of<ProviderGlobal>(context, listen: false);
-    return Consumer<CategoryViewModel>(
+    return Consumer<OccasionViewModel>(
       builder: (context, value, child) {
         if (value.isLoading) {
           return SizedBox(
@@ -45,40 +35,37 @@ class BuildTapBarCategoriesTapsState extends State<BuildTapBarCategoriesTaps> {
             ),
           );
         }
-        if (value.errorMassage!.isNotEmpty) {
+
+
+        else if (value.errorMassage?.isNotEmpty ?? false) {
           return Center(
             child: Text(
-              value.errorMassage!,
-              style: TextStyle(color: Colors.red, fontSize: 18.sp),
+              value.errorMassage ?? "Unknown error",
+              style: const TextStyle(color: Colors.red),
             ),
           );
         }
-        if (value.noData) {
-          return Center(child: Text("No categories available"));
-        }
-        if (!isAllAdded && value.categories != null && value.categories!.isNotEmpty && value.categories!.first.id != null) {
-          value.categories!.insert(0, CategoriesApi(id: null, name: "All"));
-          isAllAdded = true;
+        if (value.occasions == null || value.occasions!.isEmpty) {
+          return const Center(child: Text("No occasions available."));
         }
         return DefaultTabController(
-          initialIndex: providerGlobal.indexTapBarCategories??0 ,
-          length: value.categories!.length,
+          initialIndex: index ?? 0,
+          length: value.occasions!.length,
           child: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: TabBar(
               onTap: (index) {
-                var productVM = Provider.of<ProductsViewModelByCategories>(context, listen: false);
-                var selected = value.categories![index];
-                productVM.getProducts(id: selected.id);
+                var id = value.occasions?[index].id;
+                productsKey.currentState?.updateID(id);
               },
               unselectedLabelColor: Colors.black38,
               labelColor: Colors.pink,
               tabAlignment: TabAlignment.start,
-              labelPadding: EdgeInsets.symmetric(horizontal: 8),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
               dividerColor: Colors.transparent,
               indicatorColor: Colors.pink,
               isScrollable: true,
-              tabs: value.categories!
+              tabs: value.occasions!
                   .map((e) => Text(
                 e.name ?? "",
                 style: const TextStyle(color: Colors.black),
