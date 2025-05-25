@@ -14,7 +14,8 @@ class BestSellerViewmodel extends ChangeNotifier {
     notifyListeners();
     try {
       BestSellerResponse response = await ApiManger.getBestSeller();
-      if (response.message == "success") {
+      if (response.message == "success")
+      {
         bestSeller = response.bestSeller;
         isLoading=false;
       }

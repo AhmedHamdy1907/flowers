@@ -16,7 +16,7 @@ class Myapp extends StatelessWidget {
       designSize: Size(375, 812),
       child: MaterialApp(
         routes: RoutesManger.routs,
-        initialRoute: RoutesManger.home,
+        initialRoute: RoutesManger.signUp,
         localizationsDelegates: [
           AppLocalizations.delegate, // Add this line
           GlobalMaterialLocalizations.delegate,

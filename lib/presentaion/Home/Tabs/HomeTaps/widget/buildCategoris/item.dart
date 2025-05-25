@@ -8,10 +8,10 @@ import '../../../../../../data_static/provider/providerGlopal.dart';
 import '../../../../home.dart';
 
 class itemCategories extends StatelessWidget {
-  CategoriesApi categoriesApi;
-  int index;
+  final CategoriesApi categoriesApi;
+  final int index;
 
-  itemCategories({super.key, required this.categoriesApi, required this.index});
+  const itemCategories({super.key, required this.categoriesApi, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +22,10 @@ class itemCategories extends StatelessWidget {
         onTap: () {
           providerGlobal.changeIndexTabBarCategories(index + 1);
           providerGlobal.changIdCategories(categoriesApi.id);
-          final homeState = context.findAncestorStateOfType<HomeState>();
-          if (homeState != null) {
-            homeState.changeTab(1);
-          }
+          providerGlobal.changeSelectedTabs(1);
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 2.h),
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.circular(16.r),
@@ -38,7 +35,7 @@ class itemCategories extends StatelessWidget {
             textAlign: TextAlign.center,
             categoriesApi.name ?? "",
             style: GoogleFonts.cairo(
-              fontSize: 11.sp,
+              fontSize: 10.sp,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),

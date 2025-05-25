@@ -31,10 +31,7 @@ class CategoriesWidget extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       providerGlobal.indexTapBarCategories = 0;
-                      final homeState = context.findAncestorStateOfType<HomeState>();
-                      if (homeState != null) {
-                        homeState.changeTab(1);
-                      }
+                      providerGlobal.changeSelectedTabs(1);
                     },
                     child: Text(
                       AppLocalizations.of(context).viewAll,
@@ -70,6 +67,7 @@ class CategoriesWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.h),
+
             ],
           );
         } else if (value.errorMassage!.isNotEmpty) {
@@ -90,10 +88,8 @@ class CategoriesWidget extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     providerGlobal.indexTapBarCategories = 0;
-                    final homeState = context.findAncestorStateOfType<HomeState>();
-                    if (homeState != null) {
-                      homeState.changeTab(1);
-                    }
+                    providerGlobal.changeSelectedTabs(1);
+
                   },
                   child: Text(
                     AppLocalizations.of(context).viewAll,

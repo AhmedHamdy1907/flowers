@@ -15,19 +15,15 @@ import '../widget/buildSearch/buildSearch.dart';
 import '../widget/buildLocation/buildlocation.dart';
 
 class HomeTaps extends StatefulWidget {
-  GlobalKey<HomeState> myWidgetKey ;
-  HomeTaps({super.key,required this.myWidgetKey});
-
+  const HomeTaps({super.key,});
   @override
   State<HomeTaps> createState() => HomeTapsState();
 }
 
 class HomeTapsState extends State<HomeTaps> {
-  // ProductsViewModelByCategories productsViewModelByCategories=ProductsViewModelByCategories();
   CategoryViewModel categoryViewModel=CategoryViewModel();
   BestSellerViewmodel bestSellerViewmodel=BestSellerViewmodel();
   OccasionViewModel occasionViewModel=OccasionViewModel();
-
   @override
   void initState() {
     // TODO: implement initState

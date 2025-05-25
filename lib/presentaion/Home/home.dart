@@ -7,46 +7,27 @@ import 'Tabs/HomeTaps/view/homeTaps.dart';
 import 'Tabs/profileTaps/view/profiletaps.dart';
 import 'package:flower/l10n/app_localizations.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => HomeState();
-}
-
-class HomeState extends State<Home> {
-  int selectedIndex = 0;
-  GlobalKey<HomeState> homeKey = GlobalKey<HomeState>();
-
-  void changeTab(int index) {
-
-    if (index!=1)
-      {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Provider.of<ProviderGlobal>(context,listen: false).changeIndexTabBarCategories(0);
-        });
-      }
-
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var providerGlobal = Provider.of<ProviderGlobal>(context);
     List<Widget> taps = [
-      HomeTaps(myWidgetKey: homeKey),
+      HomeTaps(),
       CategoriesTaps(),
       CartsTaps(),
       ProfileTaps(),
     ];
-
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          currentIndex: selectedIndex,
-          onTap: (index) => changeTab(index),
+          currentIndex: providerGlobal.selectedTabs ?? 0,
+          onTap: (index) {
+            providerGlobal.changeSelectedTabs(index);
+            providerGlobal.changeIndexTabBarCategories(0);
+          },
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -66,7 +47,7 @@ class HomeState extends State<Home> {
             ),
           ],
         ),
-        body: taps[selectedIndex],
+        body: taps[providerGlobal.selectedTabs ?? 0],
       ),
     );
   }
